@@ -1,6 +1,6 @@
 // API Configuration
 const API_CONFIG = {
-    API_BASE: 'http://localhost:5000/api',
+    API_BASE: 'https://glyptic.in/api',
 }
 
 // Export for use in other files
