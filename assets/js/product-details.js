@@ -4,6 +4,7 @@
  */
 
 const API_BASE_URL = `${API_CONFIG.API_BASE}`;
+const UPLOAD_BASE_URL = API_CONFIG.UPLOAD_BASE;
 
 // Initialize when DOM is loaded
 document.addEventListener("DOMContentLoaded", function () {
@@ -92,7 +93,7 @@ function updateProductImages(product) {
 
   // Set main image
   if (images.length > 0 && mainImage) {
-    mainImage.src = `${API_BASE_URL.replace("/api", "")}/uploads/${images[0]}`;
+    mainImage.src = `${UPLOAD_BASE_URL}/uploads/${images[0]}`;
     mainImage.alt = product.title;
   }
 
@@ -101,7 +102,7 @@ function updateProductImages(product) {
     thumbnailContainer.innerHTML = images
       .map(
         (image, index) => `
-            <img src="${API_BASE_URL.replace("/api", "")}/uploads/${image}" 
+            <img src="${UPLOAD_BASE_URL}/uploads/${image}" 
                  alt="${product.title} ${index + 1}"
                  class="thumbnail-image"
                  style="width: 80px; height: 80px; object-fit: cover; border-radius: 8px; cursor: pointer; border: 2px solid transparent; margin-right: 10px;"
@@ -164,7 +165,7 @@ function updateSpecificationTab(product) {
   if (specContents.length > 0) {
     specContents.forEach((content) => {
       if (content.subType === "image" && content.data) {
-        html += `<img src="${API_BASE_URL.replace("/api", "")}/uploads/${
+        html += `<img src="${UPLOAD_BASE_URL}/uploads/${
           content.data
         }" alt="Specification" style="max-width: 100%; height: auto; margin-bottom: 20px;">`;
       } else if (content.data) {

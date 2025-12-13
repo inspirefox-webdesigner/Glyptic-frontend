@@ -141,7 +141,7 @@ class DynamicContentLoader {
 
       case 'image':
         element = document.createElement('img');
-        element.src = `${API_CONFIG.API_BASE.replace('/api', '')}/uploads/${content.data}`;
+        element.src = `${API_CONFIG.UPLOAD_BASE}/uploads/${content.data}`;
         element.alt = 'Service/Solution Image';
         element.style.maxWidth = '100%';
         element.style.height = 'auto';

@@ -48,7 +48,7 @@ function createSlideElement(slide, index) {
   const slideDiv = document.createElement("div");
   slideDiv.className = "swiper-slide swiper-product-slide";
 
-  const imageUrl = `${API_CONFIG.API_BASE.replace('/api', '')}/uploads/${slide.image}`;
+  const imageUrl = `${API_CONFIG.UPLOAD_BASE}/uploads/${slide.image}`;
   const animationDirection = index % 2 === 0 ? "fade-right" : "fade-left";
 
   slideDiv.innerHTML = `

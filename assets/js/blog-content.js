@@ -36,7 +36,7 @@ async function loadBlogs() {
                         }'">
                             <img src="${
                               firstImage
-                                ? `${API_CONFIG.API_BASE.replace('/api', '')}/uploads/${firstImage.data}`
+                                ? `${API_CONFIG.UPLOAD_BASE}/uploads/${firstImage.data}`
                                 : "assets/img/blog/default-blog.jpg"
                             }" alt="${
         blog.title

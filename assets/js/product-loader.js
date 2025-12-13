@@ -3,6 +3,7 @@
 class ProductLoader {
   constructor() {
     this.apiBase = `${API_CONFIG.API_BASE}`;
+    this.uploadBase = `${API_CONFIG.UPLOAD_BASE}`
     this.init();
   }
 
@@ -110,11 +111,11 @@ class ProductLoader {
       (content) => content.type === "coverImage"
     );
     if (coverImageContent && coverImageContent.data) {
-      imageUrl = `${this.apiBase.replace("/api", "")}/uploads/${
+      imageUrl = `${this.uploadBase}/uploads/${
         coverImageContent.data
       }`;
     } else if (product.coverImage) {
-      imageUrl = `${this.apiBase.replace("/api", "")}/uploads/${
+      imageUrl = `${this.uploadBase}/uploads/${
         product.coverImage
       }`;
     } else {
@@ -127,7 +128,7 @@ class ProductLoader {
           ? firstImageContent.data[0]
           : firstImageContent.data;
         if (imageData) {
-          imageUrl = `${this.apiBase.replace("/api", "")}/uploads/${imageData}`;
+          imageUrl = `${this.uploadBase}/uploads/${imageData}`;
         }
       }
     }
@@ -187,11 +188,11 @@ class ProductLoader {
       (content) => content.type === "coverImage"
     );
     if (coverImageContent && coverImageContent.data) {
-      mainImageSrc = `${this.apiBase.replace("/api", "")}/uploads/${
+      mainImageSrc = `${this.uploadBase}/uploads/${
         coverImageContent.data
       }`;
     } else if (product.coverImage) {
-      mainImageSrc = `${this.apiBase.replace("/api", "")}/uploads/${
+      mainImageSrc = `${this.uploadBase}/uploads/${
         product.coverImage
       }`;
     }
@@ -217,10 +218,7 @@ class ProductLoader {
     if (thumbnailImages.length > 0) {
       thumbnailImages.forEach((imageName, index) => {
         const thumbnail = document.createElement("img");
-        thumbnail.src = `${this.apiBase.replace(
-          "/api",
-          ""
-        )}/uploads/${imageName}`;
+        thumbnail.src = `${this.uploadBase}/uploads/${imageName}`;
         thumbnail.alt = `${product.title} - Variation ${index + 1}`;
         thumbnail.className = "thumbnail-image";
         thumbnail.style.cssText =
@@ -360,7 +358,7 @@ class ProductLoader {
 
             if (isImage) {
               specHTML += `<div style="margin-bottom: 1.5rem; text-align: center;">
-                <img src="${this.apiBase.replace("/api", "")}/uploads/${
+                <img src="${this.uploadBase}/uploads/${
                 specContent.data
               }"
                      style="max-width: 100%; height: 400px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);"
@@ -463,10 +461,7 @@ class ProductLoader {
             muted
             style="width: 100%; height: auto; border-radius: 8px;"
           >
-            <source src="${this.apiBase.replace(
-              "/api",
-              ""
-            )}/${videoUrl}" type="video/mp4">
+            <source src="${this.uploadBase}/${videoUrl}" type="video/mp4">
             Your browser does not support the video tag.
           </video>
         </div>

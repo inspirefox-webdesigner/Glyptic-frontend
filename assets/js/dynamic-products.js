@@ -277,7 +277,7 @@ document.addEventListener("DOMContentLoaded", function () {
   function getProductImage(product) {
     // Only use cover image
     if (product.coverImage) {
-      return `${API_CONFIG.API_BASE.replace('/api', '')}/uploads/${product.coverImage}`;
+      return `${API_CONFIG.UPLOAD_BASE}/uploads/${product.coverImage}`;
     }
 
     // Default image if no cover image

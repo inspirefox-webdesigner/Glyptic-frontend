@@ -57,7 +57,7 @@ function createGalleryItem(image) {
     const col = document.createElement('div');
     col.className = 'col-4';
 
-    const imageUrl = `${API_CONFIG.API_BASE.replace('/api', '')}/uploads/${image.filename}`;
+    const imageUrl = `${API_CONFIG.UPLOAD_BASE}/uploads/${image.filename}`;
 
     col.innerHTML = `
         <a href="${imageUrl}" data-fancybox="gallery" class="gallery-item">

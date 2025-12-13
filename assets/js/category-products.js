@@ -100,7 +100,7 @@ function renderCategories(productsByCategory) {
                     <div class="row">
                         <div class="col-12">
                             <a href="product-details.html?id=${product._id}" class="card">
-                                <img src="${API_CONFIG.API_BASE.replace('/api', '')}/uploads/${coverImage}" 
+                                <img src="${API_CONFIG.UPLOAD_BASE}/uploads/${coverImage}" 
                                      class="card-img-top" 
                                      alt="${product.title}"
                                      onerror="this.src='assets/img/product/default-product.jpg'" />
