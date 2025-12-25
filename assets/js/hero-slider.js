@@ -8,49 +8,50 @@ const defaultSlides = [
     title: "FIRE DETECTION",
     image: "assets/img/product/product-1.png",
     isLocal: true,
-    isActive: true
+    isActive: true,
   },
   {
     title: "Smart & Elegant Designs",
     image: "assets/img/product/product-2.png",
     isLocal: true,
-    isActive: true
+    isActive: true,
   },
   {
     title: "Innovation Meets Quality",
     image: "assets/img/product/product-3.png",
     isLocal: true,
-    isActive: true
-  }
+    isActive: true,
+  },
 ];
-
 
 // Hero Slider Dynamic Content Loader
 document.addEventListener("DOMContentLoaded", function () {
-    loadHeroSliderData();
+  loadHeroSliderData();
 });
 
 async function loadHeroSliderData() {
   try {
     const response = await fetch(`${API_CONFIG.API_BASE}/hero-slider`, {
-      method: 'GET',
+      method: "GET",
       headers: {
-        'Content-Type': 'application/json'
-      }
+        "Content-Type": "application/json",
+      },
     });
-    
+
     if (!response.ok) {
-      throw new Error('Backend not available');
+      throw new Error("Backend not available");
     }
-    
+
     const slides = await response.json();
-    
+
     // Filter active slides
-    const activeSlides = slides.filter(slide => slide.isActive !== false);
+    const activeSlides = slides.filter((slide) => slide.isActive !== false);
 
     if (activeSlides && activeSlides.length > 0) {
       isBackendConnected = true;
-      console.log(` Backend connected: Loading ${activeSlides.length} slides from database`);
+      console.log(
+        ` Backend connected: Loading ${activeSlides.length} slides from database`
+      );
       updateHeroSlider(activeSlides);
     } else {
       console.log(" No active slides in database, using default slides");
@@ -79,8 +80,7 @@ function updateHeroSlider(slides) {
 
   console.log(` Loading ${slides.length} slides into hero slider`);
 
-
-   // Clear existing slides only if backend is connected
+  // Clear existing slides only if backend is connected
   if (isBackendConnected) {
     swiperWrapper.innerHTML = "";
   }
@@ -104,15 +104,19 @@ function createSlideElement(slide, index) {
   const slideDiv = document.createElement("div");
   slideDiv.className = "swiper-slide swiper-product-slide";
 
-  const imageUrl = slide.isLocal 
-    ? slide.image 
+  const imageUrl = slide.isLocal
+    ? slide.image
     : `${API_CONFIG.UPLOAD_BASE}/uploads/${slide.image}`;
   const animationDirection = index % 2 === 0 ? "fade-left" : "fade-right";
 
   slideDiv.innerHTML = `
-        <img src="${imageUrl}" alt="${slide.title || 'Hero Slide'}" class="img-transition" data-aos="${animationDirection}">
+        <img src="${imageUrl}" alt="${
+    slide.title || "Hero Slide"
+  }" class="img-transition" data-aos="${animationDirection}">
         <div class="hero-content">
-            <h1 data-aos="fade-right" data-aos-delay="400">${slide.title || ''}</h1>
+            <h1 data-aos="fade-right" data-aos-delay="400">${
+              slide.title || ""
+            }</h1>
         </div>
     `;
 
@@ -127,23 +131,25 @@ function reinitializeSwiper(slideCount) {
   }
 
   const swiperContainer = document.querySelector(".product-swiper");
-  
+
   if (!swiperContainer) {
     console.error(" Swiper container not found");
     return;
   }
 
   // Check actual slide count in DOM
-  const actualSlides = document.querySelectorAll(".product-swiper-wrapper .swiper-slide");
+  const actualSlides = document.querySelectorAll(
+    ".product-swiper-wrapper .swiper-slide"
+  );
   const totalSlides = actualSlides.length;
-  
+
   console.log(` Initializing swiper with ${totalSlides} slides`);
 
   // Configure swiper based on slide count
   const swiperConfig = {
     slidesPerView: 1,
     spaceBetween: 0,
-    
+
     preloadImages: true,
     updateOnImagesReady: true,
     observer: true,
@@ -153,37 +159,38 @@ function reinitializeSwiper(slideCount) {
     speed: 1000,
     effect: "fade",
     fadeEffect: {
-      crossFade: true
+      crossFade: true,
     },
-    autoplay: totalSlides > 1 ? {
-      delay: 4000,
-      disableOnInteraction: false,
-      pauseOnMouseEnter: false,
-    } : false,
+    autoplay:
+      totalSlides > 1
+        ? {
+            delay: 4000,
+            disableOnInteraction: false,
+            pauseOnMouseEnter: false,
+          }
+        : false,
     navigation: {
       nextEl: ".swiper-button-next",
       prevEl: ".swiper-button-prev",
     },
     on: {
       init: function () {
-        console.log(` Hero Swiper initialized with ${this.slides.length} slides`);
+        console.log(
+          ` Hero Swiper initialized with ${this.slides.length} slides`
+        );
         // Show/hide navigation based on slide count
         const nextBtn = document.querySelector(".swiper-button-next");
         const prevBtn = document.querySelector(".swiper-button-prev");
         if (totalSlides <= 1) {
-          if (nextBtn) nextBtn.style.display = 'none';
-          if (prevBtn) prevBtn.style.display = 'none';
+          if (nextBtn) nextBtn.style.display = "none";
+          if (prevBtn) prevBtn.style.display = "none";
         } else {
-          if (nextBtn) nextBtn.style.display = 'flex';
-          if (prevBtn) prevBtn.style.display = 'flex';
+          if (nextBtn) nextBtn.style.display = "flex";
+          if (prevBtn) prevBtn.style.display = "flex";
         }
       },
       slideChange: function () {
         console.log(` Current slide: ${this.realIndex + 1} of ${totalSlides}`);
-        // Refresh AOS animations if available
-        if (typeof AOS !== "undefined") {
-          AOS.refresh();
-        }
       },
     },
   };
