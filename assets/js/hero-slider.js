@@ -123,27 +123,104 @@ function createSlideElement(slide, index) {
   return slideDiv;
 }
 
-function reinitializeSwiper(slideCount) {
-  // Destroy existing swiper if it exists
-  if (heroSwiper !== null && heroSwiper.destroy) {
+// function reinitializeSwiper(slideCount) {
+//   // Destroy existing swiper if it exists
+//   if (heroSwiper !== null && heroSwiper.destroy) {
+//     heroSwiper.destroy(true, true);
+//     heroSwiper = null;
+//   }
+
+//   const swiperContainer = document.querySelector(".product-swiper");
+
+//   if (!swiperContainer) {
+//     console.error(" Swiper container not found");
+//     return;
+//   }
+
+//   // Check actual slide count in DOM
+//   const actualSlides = document.querySelectorAll(
+//     ".product-swiper-wrapper .swiper-slide"
+//   );
+//   const totalSlides = actualSlides.length;
+
+//   console.log(` Initializing swiper with ${totalSlides} slides`);
+
+
+function reinitializeSwiper() {
+  // Destroy existing swiper
+  if (heroSwiper && heroSwiper.destroy) {
     heroSwiper.destroy(true, true);
     heroSwiper = null;
   }
-
+ 
   const swiperContainer = document.querySelector(".product-swiper");
-
-  if (!swiperContainer) {
-    console.error(" Swiper container not found");
-    return;
-  }
-
-  // Check actual slide count in DOM
-  const actualSlides = document.querySelectorAll(
+  const slides = document.querySelectorAll(
     ".product-swiper-wrapper .swiper-slide"
   );
-  const totalSlides = actualSlides.length;
+ 
+  const totalSlides = slides.length;
+ 
+  if (!swiperContainer || totalSlides === 0) return;
+ 
+  heroSwiper = new Swiper(".product-swiper", {
+    slidesPerView: 1,
+    spaceBetween: 0,
+ 
+    // 🔥 Fade without loop (safe)
+    effect: "fade",
+    fadeEffect: {
+      crossFade: true,
+    },
+ 
+    speed: 1000,
+    loop: false, // IMPORTANT
+ 
+    autoplay: totalSlides > 1
+      ? {
+          delay: 4000,
+          disableOnInteraction: false,
+          pauseOnMouseEnter: false,
+        }
+      : false,
+ 
+    // ✅ NAVIGATION
+    navigation: {
+      nextEl: ".swiper-button-next",
+      prevEl: ".swiper-button-prev",
+    },
+ 
+    // ❌ Disable observers (prevents freeze)
+    observer: false,
+    observeParents: false,
+ 
+    on: {
+      init() {
+        // Hide navigation if only 1 slide
+        const nextBtn = document.querySelector(".swiper-button-next");
+        const prevBtn = document.querySelector(".swiper-button-prev");
+ 
+        if (totalSlides <= 1) {
+          nextBtn && (nextBtn.style.display = "none");
+          prevBtn && (prevBtn.style.display = "none");
+        } else {
+          nextBtn && (nextBtn.style.display = "flex");
+          prevBtn && (prevBtn.style.display = "flex");
+        }
+      },
+ 
+      // 🔁 FAKE INFINITE LOOP
+      slideChangeTransitionEnd() {
+        if (this.realIndex === totalSlides - 1) {
+          setTimeout(() => {
+            this.slideTo(0, 0); // seamless jump
+          }, 4000); // same as autoplay delay
+        }
+      },
+    },
+  });
+ 
+  console.log(` Hero swiper running with ${totalSlides} slides`);
 
-  console.log(` Initializing swiper with ${totalSlides} slides`);
 
   // Configure swiper based on slide count
   const swiperConfig = {
