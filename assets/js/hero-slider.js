@@ -143,6 +143,13 @@ function reinitializeSwiper(slideCount) {
   const swiperConfig = {
     slidesPerView: 1,
     spaceBetween: 0,
+    
+    preloadImages: true,
+    updateOnImagesReady: true,
+    observer: true,
+    observeParents: true,
+
+
     loop: totalSlides > 1, // Only enable loop if more than 1 slide
     speed: 1000,
     effect: "fade",
