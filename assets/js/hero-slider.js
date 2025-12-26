@@ -107,16 +107,13 @@ function createSlideElement(slide, index) {
   const imageUrl = slide.isLocal
     ? slide.image
     : `${API_CONFIG.UPLOAD_BASE}/uploads/${slide.image}`;
-  const animationDirection = index % 2 === 0 ? "fade-left" : "fade-right";
 
   slideDiv.innerHTML = `
         <img src="${imageUrl}" alt="${
     slide.title || "Hero Slide"
-  }" class="img-transition" data-aos="${animationDirection}">
+  }" class="img-transition">
         <div class="hero-content">
-            <h1 data-aos="fade-right" data-aos-delay="400">${
-              slide.title || ""
-            }</h1>
+            <h1>${slide.title || ""}</h1>
         </div>
     `;
 
@@ -150,39 +147,28 @@ function reinitializeSwiper(slideCount) {
 
 
   // Configure swiper based on slide count
-  const swiperConfig = {
+    const swiperConfig = {
     slidesPerView: 1,
     spaceBetween: 0,
-
-    preloadImages: true,
-    updateOnImagesReady: true,
-    observer: true,
-    observeParents: true,
-
-    loop: true, // Only enable loop if more than 1 slide
+    loop: totalSlides > 1,
+    loopAdditionalSlides: 0,
     speed: 1000,
     effect: "fade",
     fadeEffect: {
       crossFade: true,
     },
-    autoplay:
-      true
-        ? {
-            delay: 4000,
-            disableOnInteraction: false,
-            pauseOnMouseEnter: false,
-          }
-        : false,
+    autoplay: totalSlides > 1 ? {
+      delay: 4000,
+      disableOnInteraction: false,
+      pauseOnMouseEnter: false,
+    } : false,
     navigation: {
       nextEl: ".swiper-button-next",
       prevEl: ".swiper-button-prev",
     },
     on: {
       init: function () {
-        console.log(
-          ` Hero Swiper initialized with ${this.slides.length} slides`
-        );
-        // Show/hide navigation based on slide count
+        console.log(` Hero Swiper initialized with ${totalSlides} slides`);
         const nextBtn = document.querySelector(".swiper-button-next");
         const prevBtn = document.querySelector(".swiper-button-prev");
         if (totalSlides <= 1) {
@@ -194,7 +180,7 @@ function reinitializeSwiper(slideCount) {
         }
       },
       slideChange: function () {
-        console.log(` Current slide: ${this.realIndex + 1} of ${totalSlides}`);
+        console.log(` Slide: ${this.realIndex + 1}/${totalSlides}`);
       },
     },
   };
