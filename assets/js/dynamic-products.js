@@ -10,8 +10,14 @@ document.addEventListener("DOMContentLoaded", function () {
   function init() {
      // Check for brand and category parameters in URL
     const urlParams = new URLSearchParams(window.location.search);
-    const brandParam = urlParams.get("brand");
-    const categoryParam = urlParams.get("category");
+    // const brandParam = urlParams.get("brand");
+    // const categoryParam = urlParams.get("category");
+    let brandParam = urlParams.get("brand");
+    let categoryParam = urlParams.get("category");
+    
+    // Normalize URL parameters
+    if (brandParam) brandParam = normalizeText(brandParam);
+    if (categoryParam) categoryParam = normalizeText(categoryParam);
 
     loadProducts(brandParam, categoryParam);
     setupEventListeners();
@@ -29,7 +35,8 @@ document.addEventListener("DOMContentLoaded", function () {
       // If category parameter exists, filter by category
       if (initialCategory) {
         filteredProducts = allProducts.filter(
-          (product) => product.category === initialCategory
+          // (product) => product.category === initialCategory
+          (product) => normalizeText(product.category) === initialCategory
         );
         currentFilter = { type: "category", value: initialCategory };
         // Open categories section if category filter is active
@@ -45,7 +52,8 @@ document.addEventListener("DOMContentLoaded", function () {
       // If brand parameter exists, filter by brand
       else if (initialBrand) {
         filteredProducts = allProducts.filter(
-          (product) => product.brand === initialBrand
+          // (product) => product.brand === initialBrand
+           (product) => normalizeText(product.brand) === initialBrand
         );
         currentFilter = { type: "brand", value: initialBrand };
         // Open brands section if brand filter is active
@@ -141,7 +149,8 @@ document.addEventListener("DOMContentLoaded", function () {
       button.textContent = getCategoryDisplayName(category);
 
        // Set active if this is the initial category
-      if (activeCategory && category === activeCategory) {
+      // if (activeCategory && category === activeCategory) {
+      if (activeCategory && normalizeText(category) === activeCategory) {
         button.classList.add("active");
         allButton.classList.remove("active");
       }
@@ -187,7 +196,8 @@ document.addEventListener("DOMContentLoaded", function () {
       button.textContent = brand;
 
       // Set active if this is the initial brand
-      if (activeBrand && brand === activeBrand) {
+      // if (activeBrand && brand === activeBrand) {
+      if (activeBrand && normalizeText(brand) === activeBrand) {
         button.classList.add("active");
         allButton.classList.remove("active");
         // Open brands section
@@ -217,7 +227,8 @@ document.addEventListener("DOMContentLoaded", function () {
   // Filter by category
   function filterByCategory(category) {
     filteredProducts = allProducts.filter(
-      (product) => product.category === category
+      // (product) => product.category === category
+      (product) => normalizeText(product.category) === normalizeText(category)
     );
     currentFilter = { type: "category", value: category };
     renderProducts();
@@ -226,7 +237,8 @@ document.addEventListener("DOMContentLoaded", function () {
   // Filter by brand
   function filterByBrand(brand) {
     filteredProducts = allProducts.filter(
-      (product) => product.brand === brand
+      // (product) => product.brand === brand
+      (product) => normalizeText(product.brand) === normalizeText(brand)
     );
     currentFilter = { type: "brand", value: brand };
     renderProducts();
@@ -333,5 +345,14 @@ document.addEventListener("DOMContentLoaded", function () {
                 </div>
             </div>
         `;
+  }
+  // Normalize text for comparison
+  function normalizeText(text) {
+    if (!text) return '';
+    return text
+      .toLowerCase()
+      .trim()
+      .replace(/&amp;/g, '&')
+      .replace(/\s+/g, ' ');
   }
 });

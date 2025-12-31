@@ -22,9 +22,13 @@ class DynamicContentLoader {
 
   activateTabFromURL(type) {
     const urlParams = new URLSearchParams(window.location.search);
-    const targetName = urlParams.get(type);
+    // const targetName = urlParams.get(type);
+    let targetName = urlParams.get(type);
     
     if (!targetName) return;
+
+     // Normalize the target name from URL
+    targetName = this.normalizeText(targetName);
 
     // Wait for tabs to be rendered
     setTimeout(() => {
@@ -32,7 +36,10 @@ class DynamicContentLoader {
       
       tabButtons.forEach(button => {
         const buttonText = button.textContent.trim();
-        if (buttonText.toLowerCase() === targetName.toLowerCase()) {
+        // if (buttonText.toLowerCase() === targetName.toLowerCase()) {
+        const normalizedButton = this.normalizeText(buttonText);
+        
+        if (normalizedButton === targetName) {
           // Deactivate all tabs
           tabButtons.forEach(btn => {
             btn.classList.remove('active');
@@ -62,6 +69,13 @@ class DynamicContentLoader {
     },);
   }
 
+  normalizeText(text) {
+    return text
+      .toLowerCase()
+      .trim()
+      .replace(/&amp;/g, '&')
+      .replace(/\s+/g, ' ');
+  }
   
 
   async loadServices() {
