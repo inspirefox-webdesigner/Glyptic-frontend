@@ -9,13 +9,60 @@ class DynamicContentLoader {
     // Load services if on service page
     if (window.location.pathname.includes('service.html')) {
       await this.loadServices();
+      this.activateTabFromURL('service');
     }
 
     // Load solutions if on solution page
     if (window.location.pathname.includes('solution.html')) {
       await this.loadSolutions();
+      this.activateTabFromURL('solution');
     }
   }
+ 
+
+  activateTabFromURL(type) {
+    const urlParams = new URLSearchParams(window.location.search);
+    const targetName = urlParams.get(type);
+    
+    if (!targetName) return;
+
+    // Wait for tabs to be rendered
+    setTimeout(() => {
+      const tabButtons = document.querySelectorAll('#v-pills-tab .nav-link');
+      
+      tabButtons.forEach(button => {
+        const buttonText = button.textContent.trim();
+        if (buttonText.toLowerCase() === targetName.toLowerCase()) {
+          // Deactivate all tabs
+          tabButtons.forEach(btn => {
+            btn.classList.remove('active');
+            const target = btn.getAttribute('data-bs-target');
+            if (target) {
+              const pane = document.querySelector(target);
+              if (pane) {
+                pane.classList.remove('show', 'active');
+              }
+            }
+          });
+
+          // Activate target tab
+          button.classList.add('active');
+          const targetPane = button.getAttribute('data-bs-target');
+          if (targetPane) {
+            const pane = document.querySelector(targetPane);
+            if (pane) {
+              pane.classList.add('show', 'active');
+            }
+          }
+
+          // Scroll to tab
+          button.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+      });
+    },);
+  }
+
+  
 
   async loadServices() {
     try {

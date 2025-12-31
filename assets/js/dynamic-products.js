@@ -8,16 +8,17 @@ document.addEventListener("DOMContentLoaded", function () {
   init();
 
   function init() {
-    // Check for brand parameter in URL
+     // Check for brand and category parameters in URL
     const urlParams = new URLSearchParams(window.location.search);
     const brandParam = urlParams.get("brand");
+    const categoryParam = urlParams.get("category");
 
-    loadProducts(brandParam);
+    loadProducts(brandParam, categoryParam);
     setupEventListeners();
   }
 
   // Load products from API
-  async function loadProducts(initialBrand = null) {
+  async function loadProducts(initialBrand = null, initialCategory = null) {
     try {
       const response = await fetch(`${API_CONFIG.API_BASE}/products`);
       if (!response.ok) {
@@ -25,8 +26,24 @@ document.addEventListener("DOMContentLoaded", function () {
       }
       allProducts = await response.json();
 
+      // If category parameter exists, filter by category
+      if (initialCategory) {
+        filteredProducts = allProducts.filter(
+          (product) => product.category === initialCategory
+        );
+        currentFilter = { type: "category", value: initialCategory };
+        // Open categories section if category filter is active
+        setTimeout(() => {
+          const categoriesContent = document.getElementById("categories-content");
+          const categoriesTitle = document.querySelector('[data-toggle="categories"]');
+          if (categoriesContent && categoriesTitle) {
+            categoriesContent.style.display = "block";
+            categoriesTitle.classList.add("active");
+          }
+        }, 100);
+      }
       // If brand parameter exists, filter by brand
-      if (initialBrand) {
+      else if (initialBrand) {
         filteredProducts = allProducts.filter(
           (product) => product.brand === initialBrand
         );
@@ -51,7 +68,7 @@ document.addEventListener("DOMContentLoaded", function () {
       }
 
       renderProducts();
-      setupFilters(initialBrand);
+      setupFilters(initialBrand, initialCategory);
     } catch (error) {
       console.error("Error loading products:", error);
       showError("Failed to load products. Please try again later.");
@@ -92,13 +109,13 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   // Setup dynamic filters
-  function setupFilters(activeBrand = null) {
-    setupCategoryFilters();
+  function setupFilters(activeBrand = null, activeCategory = null) {
+    setupCategoryFilters(activeCategory);
     setupBrandFilters(activeBrand);
   }
 
   // Setup category filters
-  function setupCategoryFilters() {
+   function setupCategoryFilters(activeCategory = null) {
     const categoriesContainer = document.getElementById("categories-content");
     // Get all unique categories
     const categories = [
@@ -123,6 +140,11 @@ document.addEventListener("DOMContentLoaded", function () {
       button.setAttribute("data-category", category);
       button.textContent = getCategoryDisplayName(category);
 
+       // Set active if this is the initial category
+      if (activeCategory && category === activeCategory) {
+        button.classList.add("active");
+        allButton.classList.remove("active");
+      }
       button.addEventListener("click", function () {
         filterByCategory(category);
         setActiveFilter(this, "category-filter");
