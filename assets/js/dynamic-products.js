@@ -41,8 +41,11 @@ document.addEventListener("DOMContentLoaded", function () {
         currentFilter = { type: "category", value: initialCategory };
         // Open categories section if category filter is active
         setTimeout(() => {
-          const categoriesContent = document.getElementById("categories-content");
-          const categoriesTitle = document.querySelector('[data-toggle="categories"]');
+          const categoriesContent =
+            document.getElementById("categories-content");
+          const categoriesTitle = document.querySelector(
+            '[data-toggle="categories"]'
+          );
           if (categoriesContent && categoriesTitle) {
             categoriesContent.style.display = "block";
             categoriesTitle.classList.add("active");
@@ -60,8 +63,11 @@ document.addEventListener("DOMContentLoaded", function () {
         setTimeout(() => {
           const brandsContent = document.getElementById("brands-content");
           const brandsTitle = document.querySelector('[data-toggle="brands"]');
-          const categoriesContent = document.getElementById("categories-content");
-          const categoriesTitle = document.querySelector('[data-toggle="categories"]');
+           const categoriesContent =
+            document.getElementById("categories-content");
+          const categoriesTitle = document.querySelector(
+            '[data-toggle="categories"]'
+          );
           if (brandsContent && brandsTitle) {
             brandsContent.style.display = "block";
             brandsTitle.classList.add("active");
@@ -324,6 +330,11 @@ document.addEventListener("DOMContentLoaded", function () {
       "fire-alarm": "Fire Alarm System",
       "other-products": "Other Products",
       "fire-suppression": "Fire Suppression System",
+      "digital-pa": "Digital PA System",
+      "flame-smoke-camera": "Flame And Smoke Detection Camera",
+      "dts-fo-lhs": "DTS FO LHS System",
+      "linear-heat-cable": "Linear Heat Sensing Cable",
+      "smoke-detector-tester": "Smoke Detector Tester",
     };
 
     return (
@@ -347,12 +358,13 @@ document.addEventListener("DOMContentLoaded", function () {
         `;
   }
   // Normalize text for comparison
-  function normalizeText(text) {
-    if (!text) return '';
+   function normalizeText(text) {
+    if (!text) return "";
     return text
       .toLowerCase()
       .trim()
-      .replace(/&amp;/g, '&')
-      .replace(/\s+/g, ' ');
+      .replace(/&amp;/g, "&")
+      .replace(/[-_]/g, " ")
+      .replace(/\s+/g, " ");
   }
 });
