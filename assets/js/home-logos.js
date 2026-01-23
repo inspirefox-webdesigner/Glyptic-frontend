@@ -52,14 +52,17 @@ async function loadHomeLogos() {
       link.dataset.type = logo.type;
       link.dataset.value = logo.value;
 
-      const img = document.createElement("img");
-      img.src = logo.imageUrl.startsWith("http")
-        ? logo.imageUrl
-        : `${API_CONFIG.UPLOAD_BASE}${logo.imageUrl.startsWith("/uploads") ? logo.imageUrl : `/uploads/${logo.imageUrl}`}`;
+      const img = document.createElement('img');
+      const baseURL = API_CONFIG.UPLOAD_BASE;
+      img.src = logo.imageUrl.startsWith('/uploads') 
+        ? `${baseURL}${logo.imageUrl}` 
+        : logo.imageUrl;
       img.alt = logo.value;
-      img.onerror = function () {
-        console.error("Image load error:", this.src);
+      img.onerror = function() {
+        console.error('Image load error:', this.src);
       };
+
+      
 
       link.appendChild(img);
       slide.appendChild(link);
