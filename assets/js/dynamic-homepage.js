@@ -38,9 +38,9 @@ class HomePageLoader {
     if (whoWeAre.image) {
       const imageElement = aboutSection.querySelector('.img-box img');
       if (imageElement) {
-        const imageUrl = whoWeAre.image.startsWith('http') ? 
-          whoWeAre.image : 
-          `${API_CONFIG.UPLOAD_BASE}/uploads/${whoWeAre.image}`;
+        const imageUrl = whoWeAre.image.startsWith('/uploads') ? 
+          `${API_CONFIG.UPLOAD_BASE}${whoWeAre.image}` : 
+          whoWeAre.image;
         imageElement.src = imageUrl;
         imageElement.alt = whoWeAre.mainHeading;
       }
