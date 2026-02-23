@@ -6,7 +6,7 @@ async function sendEmailNotification(formData, formType) {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                to: formData.to || 'emailer@glyptic.in', // Default recipient email
+                to: formData.to || 'glyptic.sales@gmail.com', // Default recipient email
                 formType: formType,
                 formData: formData
             })
