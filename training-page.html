@@ -723,9 +723,14 @@
             container.innerHTML = '';
 
             boxes.forEach(box => {
+                  const imageHtml = box.image
+                    ? `<div class="training-box-image"><img src="${API_CONFIG.API_BASE.replace('/api', '')}/uploads/${box.image}" alt="${box.title}" /></div>`
+                    : '';
+
                 const boxHtml = `
                     <div class="col-lg-4 col-md-6 mb-4">
                         <div class="training-box">
+                            ${imageHtml}
                             <div class="training-box-number">${box.number}</div>
                             <h3 class="training-box-title">${box.title}</h3>
                             <h4 class="training-box-heading">${box.mainHeading}</h4>

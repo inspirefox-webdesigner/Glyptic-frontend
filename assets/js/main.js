@@ -1011,9 +1011,15 @@ scrollCue.init({
     - Scrolls window to top (or to .breadcumb-wrapper if present) when tabs change
     - Works for dynamically created tabs via delegated click handler
     - Listens to Bootstrap's shown.bs.tab event as a reliable activation hook
+    - Disables scroll-to-top specifically on product-details page
 */
 (function () {
     function scrollToTopTarget() {
+         // Specifically prevent scrolling on product-details.html where it breaks user experience
+        var pathname = window.location.pathname;
+        if (pathname.includes('/product-details.html') || pathname.endsWith('product-details.html')) {
+            return;
+        }
         try {
             var bread = document.querySelector('.breadcumb-wrapper');
             if (bread && typeof bread.scrollIntoView === 'function') {
@@ -1039,7 +1045,7 @@ scrollCue.init({
     // Bootstrap tab shown event
     document.addEventListener('shown.bs.tab', onTabActivated, false);
 
-    // Delegated click for any tab-like toggles (buttons/anchors created dynamically)
+    // Delegated click for any tab-like toggles
     document.addEventListener('click', function (e) {
         var btn = e.target.closest('[data-bs-toggle="pill"], [data-bs-toggle="tab"], a.nav-link, button.nav-link');
         if (!btn) return;
