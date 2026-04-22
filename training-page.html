@@ -724,8 +724,8 @@
 
             boxes.forEach(box => {
                   const imageHtml = box.image
-                    ? `<div class="training-box-image"><img src="${API_CONFIG.API_BASE.replace('/api', '')}/uploads/${box.image}" alt="${box.title}" /></div>`
-                    : '';
+                                        ? `<div class="training-box-image"><img src="${API_CONFIG.UPLOAD_BASE}/uploads/${box.image}" alt="${box.title}" /></div>`
+                                        : '';
 
                 const boxHtml = `
                     <div class="col-lg-4 col-md-6 mb-4">
