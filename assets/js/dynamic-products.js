@@ -221,22 +221,31 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   // Setup dynamic filters
-  function setupFilters(activeBrand = null, activeCategory = null) {
-    setupCategoryFilters(activeCategory);
-    setupBrandFilters(activeBrand);
+   async function setupFilters(activeBrand = null, activeCategory = null) {
+    await setupCategoryFilters(activeCategory);
+    await setupBrandFilters(activeBrand);
   }
 
   // Setup category filters
-   function setupCategoryFilters(activeCategory = null) {
+   async function setupCategoryFilters(activeCategory = null) {
     const categoriesContainer = document.getElementById("categories-content");
+    
+    // Fetch hidden categories
+    let hiddenCategories = [];
+    try {
+      const hideCatRes = await fetch(`${API_CONFIG.API_BASE}/menu-hide/category`);
+      hiddenCategories = await hideCatRes.json();
+    } catch (error) {
+      console.error("Error fetching hidden categories:", error);
+    }
     // Get all unique categories
-    const categories = [
+     const categories = [
       ...new Set(
         allProducts
           .filter((product) => product.category)
-          .map((product) => product.category)
+          .map((product) => product.category),
       ),
-    ];
+    ].filter((c) => !hiddenCategories.includes(c));
 
     // Clear existing filters except "All Products"
     const allButton = categoriesContainer.querySelector(
@@ -274,18 +283,28 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   // Setup brand filters
-  function setupBrandFilters(activeBrand = null) {
+  async function setupBrandFilters(activeBrand = null) {
     const brandsContainer = document.getElementById("brands-content");
     if (!brandsContainer) return; // Exit if brands container doesn't exist
+
+    // Fetch hidden brands
+    let hiddenBrands = [];
+    try {
+      const hideBrandRes = await fetch(`${API_CONFIG.API_BASE}/menu-hide/brand`);
+      hiddenBrands = await hideBrandRes.json();
+    } catch (error) {
+      console.error("Error fetching hidden brands:", error);
+    }
+
     
     // Get all unique brands
     const brands = [
       ...new Set(
         allProducts
           .filter((product) => product.brand)
-          .map((product) => product.brand)
+          .map((product) => product.brand),
       ),
-    ];
+    ].filter((b) => !hiddenBrands.includes(b));
 
     // Clear existing filters except "All Brands"
     const allButton = brandsContainer.querySelector('[data-brand="all"]');
